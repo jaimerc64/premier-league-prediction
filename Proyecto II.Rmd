@@ -1,0 +1,98 @@
+```{r}
+# Paquetes necesarios
+library(tidyverse)
+library(caret)
+
+# Cargar los datos
+datos <- read.csv("E0.csv")
+
+# Renombrar variables para mayor claridad
+datos <- datos %>%
+  rename(
+    Equipo_Local = HomeTeam,
+    Equipo_Visitante = AwayTeam,
+    Goles_Local = FTHG,
+    Goles_Visitante = FTAG,
+    Tiros_Local = HS,
+    Tiros_Puerta_Local = HST,
+    Corners_Local = HC,
+    Tiros_Visitante = AS,
+    Tiros_Puerta_Visitante = AST,
+    Corners_Visitante = AC
+  ) %>%
+  drop_na()
+
+# --- Crear promedios históricos por equipo como local y visitante ---
+
+# Estadísticas promedio como LOCAL
+promedios_local <- datos %>%
+  group_by(Equipo_Local) %>%
+  summarise(
+    Tiros_Local = mean(Tiros_Local),
+    Tiros_Puerta_Local = mean(Tiros_Puerta_Local),
+    Corners_Local = mean(Corners_Local),
+    Goles_Local = mean(Goles_Local)
+  )
+
+# Estadísticas promedio como VISITANTE
+promedios_visitante <- datos %>%
+  group_by(Equipo_Visitante) %>%
+  summarise(
+    Tiros_Visitante = mean(Tiros_Visitante),
+    Tiros_Puerta_Visitante = mean(Tiros_Puerta_Visitante),
+    Corners_Visitante = mean(Corners_Visitante),
+    Goles_Visitante = mean(Goles_Visitante)
+  )
+
+# --- Unir promedios en un solo dataset para entrenamiento ---
+datos_modelo <- datos %>%
+  left_join(promedios_local, by = "Equipo_Local", suffix = c("", "_Prom")) %>%
+  left_join(promedios_visitante, by = "Equipo_Visitante", suffix = c("", "_Prom"))
+
+# Modelo para predecir goles del equipo local
+modelo_local <- lm(Goles_Local ~ Tiros_Local + Tiros_Puerta_Local + Corners_Local +
+                   Tiros_Visitante + Tiros_Puerta_Visitante + Corners_Visitante, data = datos)
+
+# Modelo para predecir goles del equipo visitante
+modelo_visitante <- lm(Goles_Visitante ~ Tiros_Visitante + Tiros_Puerta_Visitante + Corners_Visitante +
+                       Tiros_Local + Tiros_Puerta_Local + Corners_Local, data = datos)
+
+# --- FUNCIÓN PARA PREDECIR GANADOR ENTRE DOS EQUIPOS ---
+predecir_partido <- function(equipo_local, equipo_visitante) {
+  local <- promedios_local %>% filter(Equipo_Local == equipo_local)
+  visitante <- promedios_visitante %>% filter(Equipo_Visitante == equipo_visitante)
+  
+  if (nrow(local) == 0 | nrow(visitante) == 0) {
+    stop("Uno de los equipos no está en la base de datos.")
+  }
+
+  datos_partido <- tibble(
+    Tiros_Local = local$Tiros_Local,
+    Tiros_Puerta_Local = local$Tiros_Puerta_Local,
+    Corners_Local = local$Corners_Local,
+    Tiros_Visitante = visitante$Tiros_Visitante,
+    Tiros_Puerta_Visitante = visitante$Tiros_Puerta_Visitante,
+    Corners_Visitante = visitante$Corners_Visitante
+  )
+
+  goles_local <- predict(modelo_local, newdata = datos_partido)
+  goles_visitante <- predict(modelo_visitante, newdata = datos_partido)
+
+  cat("⚽", equipo_local, "vs", equipo_visitante, "\n")
+  cat("Goles esperados", equipo_local, ":", round(goles_local, 2), "\n")
+  cat("Goles esperados", equipo_visitante, ":", round(goles_visitante, 2), "\n")
+
+  if (round(goles_local, 2) > round(goles_visitante, 2)) {
+    cat("🔵 Resultado esperado: Gana", equipo_local, "\n")
+  } else if (round(goles_local, 2) < round(goles_visitante, 2)) {
+    cat("🔴 Resultado esperado: Gana", equipo_visitante, "\n")
+  } else {
+    cat("🟡 Resultado esperado: Empate\n")
+  }
+}
+
+# --- EJEMPLO DE USO ---
+predecir_partido("Arsenal", "Liverpool")
+
+```
+
