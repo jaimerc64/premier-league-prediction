@@ -1,30 +1,80 @@
-# premier-league-prediction
-Statistical model for predicting Premier League match outcomes using historical data, probability theory, and trend analysis.
-## Project Overview
+# Football Match Outcome Prediction using Statistical Models
 
-This academic project develops a statistical forecasting model to predict football match outcomes using historical Premier League data.
+## Overview
 
-Key aspects of the project include:
+This project develops a statistical model to predict football match outcomes using historical data and classical statistical techniques.
 
-- Developed a statistical forecasting model using regression and probabilistic methods to predict match outcomes from historical data.
-- Conducted exploratory data analysis on performance indicators such as goals scored, possession, shots on target, and recent team form.
-- Applied regression-based techniques to identify the variables that most strongly influence team performance and match results.
-- Evaluated predictive accuracy against real-world outcomes, demonstrating the applicability of traditional statistical methods in sports analytics.
+Unlike modern approaches based on machine learning and artificial intelligence, this project focuses on transparent and interpretable methods such as regression analysis, probability theory, and trend analysis.
 
-## Technologies
+## Objective
 
-- RStudio
-- Statistical Modelling
-- Regression Analysis
-- Probability Theory
-- Data Visualization
+To evaluate whether traditional statistical models can provide reliable football match predictions using only historical performance data.
+
+## Problem Statement
+
+Sports prediction often relies on complex machine learning algorithms that operate as "black boxes".
+
+This project explores whether simpler statistical techniques can achieve competitive predictive performance while maintaining full interpretability.
+
+## Data Sources
+
+Historical football match data including:
+
+* Goals scored
+* Goals conceded
+* Possession percentage
+* Shots on target
+* Corner kicks
+* Team performance trends
+* Home and away statistics
+
+Data was collected from publicly available football datasets.
+
+## Methodology
+
+### Data Collection
+
+* Historical match data acquisition.
+* Data cleaning and preprocessing.
+
+### Exploratory Analysis
+
+* Performance trend analysis.
+* Correlation analysis between variables.
+* Identification of key predictive indicators.
+
+### Statistical Modeling
+
+Models implemented include:
+
+* Linear Regression
+* Logistic Regression
+* Probability-Based Analysis
+* Trend Analysis
+
+### Model Evaluation
+
+Predictions were compared against actual match outcomes using statistical performance metrics.
+
+## Technologies Used
+
+* Python
+* Statistical Analysis
+* Regression Models
+* Probability Theory
+* Data Visualization
+
+## Results
+
+The project identified several variables with significant predictive power regarding football match outcomes.
+
+Results demonstrated that traditional statistical techniques can provide meaningful predictions without requiring advanced machine learning models.
 
 
-## Documentation
 
-- Full report: Report.pdf
-- Project poster: poster.pdf
-- 
-  ## Results
+## Author
 
-The model was evaluated using historical Premier League fixtures and compared against actual match outcomes to assess predictive performance and reliability.
+Jaime Rodríguez Contreras
+
+Mathematical Engineering Student 
+
