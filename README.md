@@ -19,6 +19,12 @@ Key aspects of the project include:
 - Probability Theory
 - Data Visualization
 
+
+## Documentation
+
+- Full report: Report.pdf
+- Project poster: poster.pdf
+- 
   ## Results
 
 The model was evaluated using historical Premier League fixtures and compared against actual match outcomes to assess predictive performance and reliability.
